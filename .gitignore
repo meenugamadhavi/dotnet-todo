@@ -1,0 +1,39 @@
+# ---------------------
+# .NET (TodoWebApp)
+# ---------------------
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.sln.iml
+*.csproj.user
+TestResults/
+*.log
+*.trx
+*.coverage
+*.coveragexml
+publish/
+
+# Rider (JetBrains)
+.idea/
+
+# ---------------------
+# Node/Vite (Todo-Client)
+# ---------------------
+Todo-Client/node_modules/
+Todo-Client/dist/
+Todo-Client/.vite/
+Todo-Client/.env.local
+Todo-Client/.env.*.local
+Todo-Client/.DS_Store
+
+# Logs
+*.log
+
+# ---------------------
+# OS-specific
+# ---------------------
+.DS_Store
+Thumbs.db

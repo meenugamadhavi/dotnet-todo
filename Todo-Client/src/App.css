@@ -1,0 +1,43 @@
+body{
+  background-color: aliceblue;
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  text-transform: capitalize;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.header{
+display: grid;
+grid-template-rows: min-content;
+gap: 10px;
+}
+
+.todo-item{
+  display: flex;
+  margin-left: 45%;
+  padding: 10px;
+  gap:10px;
+  align-items: center;
+  font-size: 19px;
+  align-content: space-between;
+}
+
+button{
+  background-color: rgba(0, 85, 255, 0.771);
+  padding: 5px;
+  width: 90px;
+  font-size: 19px;
+}
+
+input{
+  background-color: rgba(43, 149, 4, 0.708);
+  border-radius: 2px;
+  padding: 5px;
+  font-size: 19px;
+}
+
+.header input{
+  width: 42%;
+  margin-left: 30%;
+}
