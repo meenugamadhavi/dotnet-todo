@@ -7,6 +7,7 @@ using Todo.Controllers;
 using Todo.Data;
 using Todo.Models;
 using Todo.Models.Dtos;
+using Todo.Models.ResponseDtos;
 
 namespace TestProject;
 
@@ -77,6 +78,31 @@ public class TodoControllerTest
     [Fact]
     public void AddTodoToList()
     {
-        
+       var todoId = Guid.NewGuid();
+       var taskId = Guid.NewGuid();
+       var mockService = new Mock<RetrieveAllTodos>();
+       var mockedTodoAddRequest = new TodoAddRequest()
+       {
+           TodoListId = todoId,
+           Title = "Test Task",
+       };
+       
+       mockService.Setup(s => s.AddTodo(mockedTodoAddRequest)).Returns(new AddTodoResponse
+       {
+           Id = taskId,
+           Title = mockedTodoAddRequest.Title,
+           TodoListId = mockedTodoAddRequest.TodoListId,
+           MyTodos = []
+       });
+       
+       var controller = new TodoController(mockService.Object);
+       var result = controller.AddTodoToList(mockedTodoAddRequest);
+       
+       var createdResult = Assert.IsType<CreatedResult>(result);
+       var returnValue = Assert.IsType<AddTodoResponse>(createdResult.Value);
+       
+       Assert.Equal("Test Task", returnValue.Title);    
+       Assert.Equal(201, createdResult.StatusCode);
+       
     }
 }

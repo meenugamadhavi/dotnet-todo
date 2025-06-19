@@ -30,11 +30,11 @@ namespace Todo.Controllers
         }
 
         [HttpPost("add-todo")]
-        public IActionResult AddTodo([FromBody] TodoAddRequest todo)
+        public IActionResult AddTodoToList([FromBody] TodoAddRequest todo)
         {
             var DtoTodo = todoService.AddTodo(todo);
 
-            return CreatedAtAction("AddTodoList", DtoTodo, null);
+            return Created("AddTodoList", DtoTodo);
         }
         
         [HttpPatch("{todoId:guid}")]
