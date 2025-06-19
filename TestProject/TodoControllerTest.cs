@@ -103,6 +103,51 @@ public class TodoControllerTest
        
        Assert.Equal("Test Task", returnValue.Title);    
        Assert.Equal(201, createdResult.StatusCode);
-       
+    }
+
+    [Fact]
+    public void ToggleTaskStatus()
+    {
+        var todoId = Guid.NewGuid();
+        var taskId = Guid.NewGuid();
+        var mockService = new Mock<RetrieveAllTodos>();
+        var mockedResponseData =  new MyTodos
+        {
+            Id = taskId,
+            Done = false,
+            TodoTitle = "Buy Car",
+            MyTodoListId = todoId
+        };
+        mockService.Setup(s => s.ToggleStatus(todoId)).Returns(mockedResponseData);
+        var controller = new TodoController(mockService.Object);
+        var result = controller.ToggleStatus(todoId);
+        
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnValue = Assert.IsType<MyTodos>(okResult.Value);
+        Assert.Equal(200,okResult.StatusCode);
+    }
+
+    [Fact]
+    public void DeleteTodo()
+    {
+        var todoId = Guid.NewGuid();
+        var taskId = Guid.NewGuid();
+        var mockService = new Mock<RetrieveAllTodos>();
+        
+        var mockedResponseData =  new MyTodos
+        {
+            Id = taskId,
+            Done = false,
+            TodoTitle = "Buy Car",
+            MyTodoListId = todoId
+        };
+        
+        mockService.Setup(s => s.DeleteTodo(todoId)).Returns(mockedResponseData);
+        var controller = new TodoController(mockService.Object);
+        var result = controller.DeleteTodo(todoId);
+        
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnValue = Assert.IsType<MyTodos>(okResult.Value);
+        
     }
 }
