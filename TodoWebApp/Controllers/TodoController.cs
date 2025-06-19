@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Todo.Contracts;
 using Todo.Data;
 using Todo.Models;
 using Todo.Models.Dtos;
@@ -9,28 +10,21 @@ namespace Todo.Controllers
 {
     [ApiController]
     [Route("api/todos")]
-    public class TodoController(TodoDBContext todosObj) : ControllerBase
+    public class TodoController(RetrieveAllTodos todoService) : ControllerBase
     {
-        private readonly TodoDBContext dbContext = todosObj;
+        private readonly RetrieveAllTodos todoService = todoService;
 
         [HttpGet]
         public IActionResult AllTodoLists()
         {
-            var todos = dbContext.TodoLists.Include(t => t.Todos).ToList();
+            var todos = todoService.GetAllTodoLists();
             return Ok(todos);
         }
 
         [HttpPost("add-todo-list")]
         public IActionResult AddTodoList([FromBody] AddTodoListDto todo)
         {
-            var newTodo = new MyTodoLists
-            {
-                Id = Guid.NewGuid(),
-                title = todo.Title,
-            };
-            Console.WriteLine("-------------------------------------------");
-            dbContext.Add(newTodo);
-            dbContext.SaveChanges();
+            var newTodo = todoService.AddTodoList(todo);
 
             return CreatedAtAction("AddTodoList", newTodo, null);
         }
@@ -38,44 +32,15 @@ namespace Todo.Controllers
         [HttpPost("add-todo")]
         public IActionResult AddTodo([FromBody] TodoAddRequest todo)
         {
-            var requestedTodoList = dbContext.TodoLists.Find(todo.TodoListId);
-           
-            
-            if (requestedTodoList == null)
-            {
-                return NotFound("TodoList not found");
-            }
-            
-            var newTodo = new MyTodos
-            {
-                Id = Guid.NewGuid(),
-                TodoTitle = todo.Title,
-                MyTodoListId = todo.TodoListId,
-                MyTodoList = null,
-                Done = false,
-            };
-            
-            dbContext.Todos.Add(newTodo);
-            dbContext.SaveChanges();
-
-            var DtoTodo = new AddTodoResponse
-            {
-                Id = newTodo.Id,
-                Title = newTodo.TodoTitle,
-                TodoListId = newTodo.MyTodoListId,
-                MyTodos = []
-            };
+            var DtoTodo = todoService.AddTodo(todo);
 
             return CreatedAtAction("AddTodoList", DtoTodo, null);
         }
-
+        
         [HttpPatch("{todoId:guid}")]
         public IActionResult ToggleStatus(Guid todoId)
         {
-            var todo = dbContext.Todos.Find(todoId);
-            todo.Done = !todo.Done;
-            dbContext.Todos.Update(todo);
-            dbContext.SaveChanges();
+            var todo = todoService.ToggleStatus(todoId);
 
             return Ok(todo);
         }
@@ -83,30 +48,30 @@ namespace Todo.Controllers
         [HttpDelete("delete-todo/{id:guid}")]
         public IActionResult DeleteTodo(Guid id)
         {
-            var todo = dbContext.Todos.Find(id);
-            dbContext.Todos.Remove(todo);
-            dbContext.SaveChanges();
+            try
+            {
+                var todo = todoService.DeleteTodo(id);
 
-            return Ok(todo);
+                return Ok(todo);
+            }
+            catch (Exception ex)
+            {
+                return NotFound($"{id} is not found");
+            }
         }
 
         [HttpDelete("delete-todo-list/{todoListId:guid}")]
         public IActionResult DeleteTodoList(Guid todoListId)
         {
-            var todos = dbContext.Todos
-                .Where(todo => todo.MyTodoListId == todoListId)
-                .ToList();
-
-            dbContext.Todos.RemoveRange(todos);
-
-            var todoList = dbContext.TodoLists.Find(todoListId);
-            if (todoList != null)
+            try
             {
-                dbContext.TodoLists.Remove(todoList);
+                var todos = todoService.DeleteTodoList(todoListId);
+                return Ok(todos);
             }
-
-            dbContext.SaveChanges();
-            return Ok(todoList);
+            catch (Exception ex)
+            {
+                return NotFound($"{todoListId} is not found");
+            }
         }
     }
 }

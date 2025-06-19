@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Todo.Contracts;
 using Todo.Data;
+using Todo.Models;
 
 public class Program
 {
@@ -31,9 +33,10 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddDbContext<TodoDBContext>(options =>
+        builder.Services.AddDbContext<TodoDbContext>(options =>
             options.UseNpgsql("Host=localhost;Port=5432;Database=MyTodoDb;User Id=postgres;Password=9908349684;"));
 
+        builder.Services.AddScoped<RetrieveAllTodos,TodoService>();
         builder.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(policy =>

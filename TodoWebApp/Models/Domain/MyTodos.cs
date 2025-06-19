@@ -8,5 +8,8 @@ namespace Todo.Models
         
         public Guid MyTodoListId { get; set; }
         public MyTodoLists MyTodoList { get; set; }
+        
+        // public DateTime TaskCompletion { get; set; }
+        // public string Priority { get; set; }
     }
 }

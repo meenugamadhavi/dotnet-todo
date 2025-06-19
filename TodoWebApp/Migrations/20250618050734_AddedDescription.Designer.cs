@@ -12,8 +12,8 @@ using Todo.Data;
 namespace Todo.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20250617070204_IntialMigrations")]
-    partial class IntialMigrations
+    [Migration("20250618050734_AddedDescription")]
+    partial class AddedDescription
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,9 @@ namespace Todo.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<string>("title")
                         .IsRequired()

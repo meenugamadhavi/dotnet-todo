@@ -3,9 +3,9 @@ using Todo.Models;
 
 namespace Todo.Data
 {
-    public class TodoDBContext : DbContext
+    public class TodoDbContext : DbContext
     {
-        public TodoDBContext(DbContextOptions<TodoDBContext> options) :base(options)
+        public TodoDbContext(DbContextOptions<TodoDbContext> options) :base(options)
         {
         }
         

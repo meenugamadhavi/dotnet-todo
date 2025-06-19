@@ -10,7 +10,7 @@ using Todo.Data;
 
 namespace Todo.Migrations
 {
-    [DbContext(typeof(TodoDBContext))]
+    [DbContext(typeof(TodoDbContext))]
     partial class TodoDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -27,6 +27,9 @@ namespace Todo.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<string>("title")
                         .IsRequired()
