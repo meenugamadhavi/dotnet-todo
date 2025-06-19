@@ -26,7 +26,7 @@ namespace Todo.Controllers
         {
             var newTodo = todoService.AddTodoList(todo);
 
-            return CreatedAtAction("AddTodoList", newTodo, null);
+            return Created("AddTodoList", newTodo);
         }
 
         [HttpPost("add-todo")]
